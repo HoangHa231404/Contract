@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- <record id="view_sale_order_form_inherit_add_contract_button" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.add.contract.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="contract_id" invisible="1"/>
+            </field>
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <button name="action_create_contract" type="object" string="Hợp đồng"
+                    class="btn-secondary"
+                    attrs="{'invisible': [('state', '!=', 'sale'), ('contract_id', '!=', False)]}" />
+            </xpath>
+        </field>
+    </record> -->
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group" position="after">
+                <group>
+                    <field name="contract_id" readonly="1" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_sale_order_form_inherit_contract_button" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.contract.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']/button[1]" position="before">
+                <button name="action_view_contract"
+                    type="object"
+                    string="Hợp đồng"
+                    class="btn-secondary"
+                    icon="fa-light fa-file-signature" 
+                    attrs="{'invisible': [('contract_id', '=', False)]}" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

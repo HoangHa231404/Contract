@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_model,contract.model,model_contract_model,base.group_user,1,1,1,1
+access_contract_sales,access.contract.sales,model_contract_model,sales_team.group_sale_salesman,1,1,1,0
+access_contract_manager,access.contract.manager,model_contract_model,sales_team.group_sale_manager,1,0,0,0
+access_contract_director,access.contract.director,model_contract_model,base.group_user,1,0,0,0
+access_contract_admin,contract.model_admin,contract.model_contract_model,base.group_system,1,1,1,1

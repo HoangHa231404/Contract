@@ -1,0 +1,9 @@
+.o_statusbar_buttons {
+    width: 100%;
+}
+
+.o_form_statusbar {
+    display: flex; 
+    align-items: center; 
+    width: 100%;
+}

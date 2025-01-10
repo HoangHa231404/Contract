@@ -1,0 +1,74 @@
+<odoo>
+    <record id="view_contract_form_inherit_approval" model="ir.ui.view">
+    <field name="name">contract.form.inherit.approval</field>
+    <field name="model">contract.model</field>
+    <field name="inherit_id" ref="contract.view_contract_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//sheet" position="before">
+            <header>
+                <div class="o_form_statusbar">
+                    <div style="display: flex; gap: 10px;">
+                        <button name="action_manager_approve" type="object"
+                            string="Quản lý phê duyệt"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                            class="btn-primary" />
+
+                        <button name="action_director_approve" type="object"
+                            string="Giám đốc phê duyệt"
+                            attrs="{'invisible': [('state', '!=', 'manager_approve')]}"
+                            class="btn-primary" />
+
+                        <button name="action_approve" type="object"
+                            string="Hoàn thành phê duyệt"
+                            attrs="{'invisible': [('state', '!=', 'director_approve')]}"
+                            class="btn-primary" />
+                    </div>
+
+                    <div style="flex-grow: 1;"></div>
+
+                    <div>
+                        <!-- Hiển thị trạng thái trên thanh đầu -->
+                        <field name="state" widget="statusbar"
+                            statusbar_visible="draft,manager_approve,director_approve,approved" />
+                    </div>
+                </div>
+            </header>
+        </xpath>
+
+        <xpath expr="//sheet/group/field[@name='state']" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+    </field>
+</record>
+
+
+
+    <record id="contract_rule_sales" model="ir.rule">
+        <field name="name">Contract - Sales</field>
+        <field name="model_id" ref="model_contract_model" />
+        <field name="domain_force">[('state', '=', 'draft')]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]" />
+    </record>
+
+    <record id="contract_rule_manager" model="ir.rule">
+        <field name="name">Contract - Manager</field>
+        <field name="model_id" ref="model_contract_model" />
+        <field name="domain_force">[('state', '=', 'manager_approve')]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_manager'))]" />
+    </record>
+
+    <record id="contract_rule_director" model="ir.rule">
+        <field name="name">Contract - Director</field>
+        <field name="model_id" ref="model_contract_model" />
+        <field name="domain_force">[('state', '=', 'director_approve')]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+    </record>
+
+    <record id="contract_rule_admin" model="ir.rule">
+        <field name="name">Contract - Admin</field>
+        <field name="model_id" ref="contract.model_contract_model" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]" />
+    </record>
+
+</odoo>
