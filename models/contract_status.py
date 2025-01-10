@@ -54,12 +54,17 @@ class Contract(models.Model):
         return super(Contract, self).create(vals_list)
 
     def write(self, vals):
-        # Quy định quyền chỉnh sửa dựa trên trạng thái
         for contract in self:
-            if contract.state in ['manager_approve', 'director_approve', 'approved']:
-                raise exceptions.UserError("Không thể chỉnh sửa hợp đồng ở trạng thái này.")
+            if contract.state in ['approved']:
+                raise exceptions.UserError("Không thể chỉnh sửa hợp đồng đã được phê duyệt.")
+            
+            if contract.state == 'manager_approve' and not self.env.user.has_group('sales_team.group_sale_manager'):
+                raise exceptions.AccessError("Chỉ Quản lý bán hàng mới được phép chỉnh sửa hợp đồng ở trạng thái Quản lý phê duyệt.")
+            
+            if contract.state == 'director_approve' and not self.env.user.has_group('sales_team.group_sale_manager') and not self.env.user.has_group('contract.contract_rule_director'):
+                raise exceptions.AccessError("Chỉ Quản lý bán hàng hoặc Giám đốc mới được phép chỉnh sửa hợp đồng ở trạng thái Giám đốc phê duyệt.")
+            
             if contract.state == 'draft' and not self.env.user.has_group('sales_team.group_sale_salesman'):
                 raise exceptions.AccessError("Chỉ Sale được phép chỉnh sửa hợp đồng ở trạng thái Nháp.")
+
         return super(Contract, self).write(vals)
-
-
